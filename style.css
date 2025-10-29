@@ -1,0 +1,43 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    background: #1b2021;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    background: #e7d7c1;
+    width: 768px;
+    height: 768px;
+}
+
+.ui {
+    padding: 8px 10px;
+    color: white;
+    font: 14px system-ui;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.checkbox-input {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+}
