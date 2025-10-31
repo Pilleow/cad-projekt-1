@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Canvas Rectangles</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -21,13 +21,25 @@
             <input id="toggleCandidates" type="checkbox" checked>
             Show candidates
         </label>
+        <label>
+            <select id="sceneSelect">
+                <option value="sponge">Menger Sponge</option>
+                <option value="tri">Sierpinski Triangle</option>
+                <option value="halfrect">Half Cubes</option>
+            </select>
+        </label>
         <button id="savePng">Save PNG</button>
+    </div>
+    <div class="ui">
         <p id="print" style="opacity: 0.7">
             Idle.
+        </p>
+        <p id="polyCount", style="opacity: 0.7">
+            0
         </p>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script type="module" src="./main.js"></script>
 </body>
 </html>
