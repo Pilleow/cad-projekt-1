@@ -13,33 +13,51 @@
     </div>
 
     <div id="ui" class="ui">
-        <label class="checkbox-input">
-            <input id="autoMode" type="checkbox">
-            Auto mode (place every 0.01s)
-        </label>
-        <label class="checkbox-input">
-            <input id="toggleCandidates" type="checkbox" checked>
-            Show candidates
-        </label>
-        <label>
-            <select id="sceneSelect">
-                <option value="sponge">Menger Sponge</option>
-                <option value="tri">Sierpinski Triangle</option>
-                <option value="halfrect">Half Cubes</option>
-            </select>
-        </label>
-        <button id="savePng">Save PNG</button>
+        <div class="sub-menu">
+            <label class="checkbox-input">
+                <input id="toggleCandidates" type="checkbox" checked>
+                Show candidates
+            </label>
+            <label>
+                <select id="sceneSelect" style="background-color: cornflowerblue">
+                    <option value="tri">Sierpinski Triangle</option>
+                    <option value="sponge">Menger Sponge</option>
+                    <option value="halfrect">Half Cubes</option>
+                </select>
+            </label>
+            <button id="savePng" style="background-color: yellowgreen">Save PNG</button>
+            <button id='resetPage' onclick="window.location.reload()" style="background-color: orangered">Reset</button>
+        </div>
+        <div class="sub-menu">
+            <p id="print" style="opacity: 0.7;">Idle.</p>
+            <p style="opacity: 0.7;">Polygons created:</p>
+            <p style="opacity: 0.7;" id="polyCount">0</p>
+            <p style="opacity: 0.7;">Productions applied:</p>
+            <p style="opacity: 0.7;" id="prodCount">0</p>
+        </div>
+        <div class="sub-menu" style="padding-bottom: 0; border-bottom: none;">
+            <label class="checkbox-input">
+                <input id="autoMode" type="checkbox">
+                Place automatically
+            </label>
+            <label class="range-input">
+                <input id="stochasticCount" type="range" min="-1" max="1" value="-1" step="1">
+                &nbsp;&nbsp;&nbsp;Mode type
+            </label>
+        </div>
+        <div class="sub-menu" style="padding-bottom: 0; border-bottom: none;">
+            <p style="opacity: 0.7; text-align: justify; height: 105px;" id="autoInformation">Auto mode will use
+                weighted probability. <br/><br/>This mode is slow because it iterates over every avaialble polygon and
+                production, but is fair towards all polygons, as ones with more surface area will have a higher
+                probability of being chosen compared to polygons with a smaller surface area.</p>
+        </div>
     </div>
-    <div class="ui">
-        <p id="print" style="opacity: 0.7">
-            Idle.
-        </p>
-        <p id="polyCount", style="opacity: 0.7">
-            0
-        </p>
-    </div>
-</div>
 
-<script type="module" src="./main.js"></script>
+    <footer>
+        Projektowanie Wspomagane Komputerem - Projekt 1 - Igor Zamojski - 2025
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+</div>
 </body>
 </html>

@@ -1,5 +1,3 @@
-import {mouseX, mouseY} from "./ui.js";
-
 export let view = {
     zoom: 1,
     offsetX: 0,
@@ -38,23 +36,6 @@ export function drawPolys(ctx, polys) {
     polys.forEach(p => p.draw(ctx));
 }
 
-function polyCentroid(p) {
-    let sx = 0, sy = 0;
-    for (const {x, y} of p.pts) {
-        sx += x;
-        sy += y;
-    }
-    return {x: sx / p.pts.length, y: sy / p.pts.length};
-}
-
-function colorFromDistanceSquared(d2) {
-    const factor = Math.min(1, d2 / (200 * 200));
-    const r = Math.floor(231 * factor);
-    const g = Math.floor(215 * factor);
-    const b = Math.floor(193 * factor);
-    return `rgb(${r},${g},${b})`;
-}
-
 export function drawWithPreviews(ctx, polys, candidates, hovered) {
     ctx.setTransform(
         view.zoom, 0,
@@ -66,15 +47,17 @@ export function drawWithPreviews(ctx, polys, candidates, hovered) {
         ctx.save();
         ctx.setLineDash([2 / view.zoom, 2 / view.zoom]);
         ctx.lineWidth = 1 / view.zoom * 0.8;
-        const worldMouse = screenToWorld(mouseX, mouseY);
-        for (const c of candidates) for (const p of c.toAdd) {
-            const ctr = polyCentroid(p);
-            const dx = ctr.x - worldMouse.x;
-            const dy = ctr.y - worldMouse.y;
-            const d2 = dx * dx + dy * dy;
-
-            ctx.strokeStyle = colorFromDistanceSquared(d2);
-            p.draw(ctx, false, true);
+        // const worldMouse = screenToWorld(mouseX, mouseY);
+        for (const c of candidates) {
+            // const ctr = polyCentroid(c.toAdd[0]);
+            for (const p of c.toAdd) {
+                // const dx = ctr.x - worldMouse.x;
+                // const dy = ctr.y - worldMouse.y;
+                // const d2 = dx * dx + dy * dy;
+                //
+                // ctx.strokeStyle = colorFromDistanceSquared(d2);
+                p.draw(ctx, false, true);
+            }
         }
         ctx.restore();
     }

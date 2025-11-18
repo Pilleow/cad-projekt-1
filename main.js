@@ -6,7 +6,7 @@ import {setupUI} from './ui.js';
 import {EQUI_TRIANGLE_H} from './utils.js';
 
 const canvas = document.getElementById('canvas');
-const {ctx, resizeCanvas, dimsCss, clearAndBackground} = initCanvasAndCtx(canvas);
+const {ctx, dimsCss, clearAndBackground} = initCanvasAndCtx(canvas);
 
 function isInBounds(poly) {
     const {width, height} = dimsCss();
@@ -192,10 +192,12 @@ const toggleCandidatesEl = document.getElementById('toggleCandidates');
 const savePngEl = document.getElementById('savePng');
 const autoModeEl = document.getElementById('autoMode');
 const sceneSelect = document.getElementById('sceneSelect');
+const stochasticCountEl = document.getElementById('stochasticCount');
+const autoInformationEl = document.getElementById('autoInformation');
 const ui = setupUI({
     canvas, ctx, dimsCss, clearAndBackground,
     prods: presets.sponge.prods,
-    isInBounds, printEl, toggleCandidatesEl, savePngEl, autoModeEl
+    isInBounds, printEl, toggleCandidatesEl, savePngEl, autoModeEl, stochasticCountEl, autoInformationEl
 });
 
 function loadPreset(key) {
@@ -212,7 +214,7 @@ function loadPreset(key) {
     ui.redraw();
 }
 
-loadPreset('sponge');
+loadPreset('tri');
 
 sceneSelect?.addEventListener('change', (e) => {
     loadPreset(e.target.value);

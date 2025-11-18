@@ -1,19 +1,21 @@
-import {polys, addPoly} from './store.js';
+import {addPoly, polys} from './store.js';
 import {findApplicableProductions} from './engine.js';
-import {drawWithPreviews, view, screenToWorld} from './draw.js';
+import {drawWithPreviews, screenToWorld, view} from './draw.js';
 
 export let mouseX = 0, mouseY = 0;
 
 export function setupUI({
                             canvas, ctx, dimsCss, clearAndBackground,
                             prods, isInBounds, printEl,
-                            toggleCandidatesEl, savePngEl, autoModeEl
+                            toggleCandidatesEl, savePngEl, autoModeEl,
+                            stochasticCountEl, autoInformationEl
                         }) {
     let currentProds = prods;
     let showCandidates = true;
     let candidates = [];
     let hoveredCandidate = null;
     let autoTimer = null;
+    let stochasticCount = -1;
 
     function polyArea(p) {
         const pts = p.pts;
@@ -55,7 +57,7 @@ export function setupUI({
 
     function refreshCandidates() {
         const {width, height} = dimsCss();
-        candidates = findApplicableProductions(currentProds, width, height);
+        candidates = findApplicableProductions(currentProds, width, height, stochasticCount);
     }
 
     function redraw() {
@@ -76,31 +78,16 @@ export function setupUI({
         return null;
     }
 
-    canvas.addEventListener('mousemove', (e) => {
-        const r = canvas.getBoundingClientRect();
-        const x = e.clientX - r.left, y = e.clientY - r.top;
-
-        mouseX = x;
-        mouseY = y;
-
-        if (showCandidates) {
-            refreshCandidates();
-            hoveredCandidate = candidateUnderPoint(candidates, x, y);
-        } else {
-            hoveredCandidate = null;
-        }
-        redraw();
-    });
-
     canvas.addEventListener('click', (e) => {
         if (!showCandidates) return;
+
         const r = canvas.getBoundingClientRect();
         const x = e.clientX - r.left, y = e.clientY - r.top; // fixed: use 'e', not global 'event'
         refreshCandidates();
         const hit = candidateUnderPoint(candidates, x, y);
         if (hit) {
             if (printEl) {
-                printEl.textContent = `Applied production ${hit.prod.id} to polys: ` +
+                printEl.textContent = `Applied ${hit.prod.id} to ` +
                     hit.pcomb.map(p => `#${p.id}`).join(", ");
             }
             hit.toAdd.forEach(p => addPoly(p, isInBounds));
@@ -112,6 +99,8 @@ export function setupUI({
 
     toggleCandidatesEl?.addEventListener('change', (e) => {
         showCandidates = e.target.checked;
+        stochasticCount = -10;
+        stochasticCountEl.value = -1;
         if (showCandidates) refreshCandidates();
         redraw();
     });
@@ -144,7 +133,6 @@ export function setupUI({
             const choice = weightedChoice(candidates);
 
             if (printEl) {
-                const score = scoreCandidate(choice).toFixed(2);
                 printEl.textContent = `Applied ${choice.prod.id} to ` +
                     choice.pcomb.map(p => `#${p.id}`).join(", ");
             }
@@ -156,8 +144,6 @@ export function setupUI({
     }
 
     function stopAuto() {
-        toggleCandidatesEl.checked = true;
-        showCandidates = true;
         if (autoTimer) {
             clearInterval(autoTimer);
             autoTimer = null;
@@ -174,6 +160,17 @@ export function setupUI({
     }
 
     autoModeEl?.addEventListener('change', (e) => e.target.checked ? startAuto() : stopAuto());
+    stochasticCountEl?.addEventListener('change', (e) => {
+        stochasticCount = e.target.value * 10;
+
+        if (e.target.value === "-1") autoInformationEl.innerText = "Auto mode will use weighted probability.\n\nThis mode is slow because it iterates over every avaialble polygon and production, but is fair towards all polygons, as ones with more surface area will have a higher probability of being chosen compared to polygons with a smaller surface area.";
+        else if (e.target.value === "0") autoInformationEl.innerText = "Auto mode will select the first available production. \n\nThis mode is good for filling the area with packed productions, but is entirely non-deterministic and does not use any randomness at all.";
+        else if (e.target.value === "1") autoInformationEl.innerText = "Auto mode will randomly select one of ten possible productions. \n\nThis mode is very fast and efficient because it only iterates over a randomly selected ten polygons and ten productions, however it uses uniform randomness, which may result in large patches of empty space in some regions, and dense concentrations of polygons in others.";
+        else autoInformationEl.innerText = "Unspecified behaviour. Reload page.";
+
+        if (showCandidates) refreshCandidates();
+        redraw();
+    });
 
     canvas.addEventListener("wheel", (e) => {
         e.preventDefault();

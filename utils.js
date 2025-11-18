@@ -1,6 +1,4 @@
-export const EPS_PX = 1 / (2 ** 20) // 20
 export const EQUI_TRIANGLE_H = 0.866025403784
-export const snap = (v, eps = EPS_PX) => Math.round(v / eps) * eps;
 
 export function edgeLen(pts, i0 = 0, i1 = 1) {
     const a = pts[i0], b = pts[i1];
@@ -17,4 +15,15 @@ export function* uniqueCombinations(arr, n, start = 0, combo = []) {
         yield* uniqueCombinations(arr, n, i + 1, combo);
         combo.pop();
     }
+}
+
+export function randomNoRepeats(array) {
+    var copy = array.slice(0);
+    return function() {
+        if (copy.length < 1) { copy = array.slice(0); }
+        var index = Math.floor(Math.random() * copy.length);
+        var item = copy[index];
+        copy.splice(index, 1);
+        return item;
+    };
 }

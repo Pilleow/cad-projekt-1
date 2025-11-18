@@ -1,5 +1,3 @@
-import {EPS_PX, snap} from './utils.js';
-
 export class Poly {
     static nextId = 1;
 
@@ -20,21 +18,14 @@ export class Poly {
         return {x: sx / n, y: sy / n};
     }
 
-    translate(dx, dy) {
-        for (const p of this.pts) {
-            p.x += dx;
-            p.y += dy;
-        }
-    }
-
     clone() {
         return new Poly(this.pts.map(p => ({...p})), this.strokeColor, this.fillColor);
     }
 
     transform(scale = 1, dx = 0, dy = 0) {
         for (const p of this.pts) {
-            p.x = snap(p.x * scale + dx);
-            p.y = snap(p.y * scale + dy);
+            p.x = p.x * scale + dx;
+            p.y = p.y * scale + dy;
         }
         return this;
     }
@@ -48,18 +39,12 @@ export class Poly {
         return min;
     }
 
-    key() {
-        const pts = this.pts.map(p => ({ x: snap(p.x), y: snap(p.y) }));
-        const idx = Poly._minVertexIndex(pts);
-        const ordered = [...pts.slice(idx), ...pts.slice(0, idx)];
-        return ordered.map(p => `${p.x},${p.y}`).join("|");
+    getPoints() {
+        return this.pts;
     }
 
-    relKey(s = 1, dx = 0, dy = 0) {
-        const pts = this.pts.map(p => ({
-            x: snap(p.x * s + dx),
-            y: snap(p.y * s + dy)
-        }));
+    key() {
+        const pts = this.pts.map(p => ({ x: p.x, y: p.y }));
         const idx = Poly._minVertexIndex(pts);
         const ordered = [...pts.slice(idx), ...pts.slice(0, idx)];
         return ordered.map(p => `${p.x},${p.y}`).join("|");
@@ -79,13 +64,6 @@ export class Poly {
             if (!isPreview) ctx.strokeStyle = this.strokeColor;
             ctx.stroke();
         }
-    }
-
-    static keyFromPointsTranslated(pts, dx, dy) {
-        const shifted = pts.map(p => ({x: p.x + dx, y: p.y + dy}));
-        const idx = Poly._minVertexIndex(shifted);
-        const ordered = [...shifted.slice(idx), ...shifted.slice(0, idx)];
-        return ordered.map(p => `${p.x},${p.y}`).join("|");
     }
 
     contains(x, y) {
