@@ -1,6 +1,5 @@
 export const polys = [];
-export const polyKeys = new Set();
-export const polyKeyToPoly = new Map();
+const polyKeys = new Set();
 
 export function comparePolys(a, b) {
     const ca = a.centroid(), cb = b.centroid();
@@ -19,27 +18,21 @@ function findInsertIndexPoly(arr, poly) {
     return lo;
 }
 
-export function indexPoly(poly) { polyKeyToPoly.set(poly.key(), poly); }
-
-export function rebuildIndex() {
-    polyKeyToPoly.clear();
-    for (const p of polys) indexPoly(p);
-}
 
 export function addPoly(poly, isInBounds = () => true) {
     if (!isInBounds(poly)) return;
-    const key = poly.key();
-    polyKeys.add(key);
+    let k = poly.key();
+    if (polyKeys.has(k)) return;
+    polyKeys.add(k);
     const idx = findInsertIndexPoly(polys, poly);
     polys.splice(idx, 0, poly);
-    indexPoly(poly);
     document.getElementById("polyCount").innerText = polys.length.toString();
 }
 
 export function findPoly(target_p, e=2**2) {
     const target_pts = target_p.getPoints()
     let minPoly = polys[0];
-    let minSqErr = 2**4;
+    let minSqErr = 2**2;
     for (const p of polys) {
         let sqErr = 0;
         let pts = p.getPoints();
@@ -58,10 +51,6 @@ export function findPoly(target_p, e=2**2) {
     return minSqErr < e ? minPoly : null;
 }
 
-export function getPolyByKey(k) { return polyKeyToPoly.get(k); }
-
 export function clearStore() {
     polys.length = 0;
-    polyKeys.clear();
-    polyKeyToPoly.clear();
 }

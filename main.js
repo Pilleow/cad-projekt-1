@@ -184,6 +184,55 @@ const presets = {
                 {x: CW2 + s / 2, y: CH2 - s / 2}
             ]), isInBoundsFn);
         }
+    },
+
+
+    tiles: {
+        name: 'Tiles',
+        prods: [
+            new Prod(
+                [new Poly([
+                    {x: 0, y: 0}, {x: 0, y: 32}, {x: 16, y: 32}, {x: 16, y: 0}
+                ])],
+                [new Poly([
+                    {x: 16, y: 0}, {x: 16, y: 16}, {x: 48, y: 16}, {x: 48, y: 0}
+                ])]
+            ),
+            new Prod(
+                [new Poly([
+                    {x: 0, y: 0}, {x: 0, y: 16}, {x: 32, y: 16}, {x: 32, y: 0}
+                ])],
+                [new Poly([
+                    {x: 0, y: 16}, {x: 0, y: 48}, {x: 16, y: 48}, {x: 16, y: 16}
+                ])]
+            ),
+            new Prod(
+                [new Poly([
+                    {x: 0, y: 0}, {x: 0, y: 32}, {x: 16, y: 32}, {x: 16, y: 0}
+                ])],
+                [new Poly([
+                    {x: -32, y: 16}, {x: -32, y: 32}, {x: 0, y: 32}, {x: 0, y: 16}
+                ])]
+            ),
+            new Prod(
+                [new Poly([
+                    {x: 0, y: 0}, {x: 0, y: 16}, {x: 32, y: 16}, {x: 32, y: 0}
+                ])],
+                [new Poly([
+                    {x: 16, y: -32}, {x: 16, y: 0}, {x: 32, y: 0}, {x: 32, y: -32}
+                ])]
+            ),
+        ],
+        seed(addPolyFn, isInBoundsFn, dimsCssFn) {
+            const {width, height} = dimsCssFn();
+
+            addPolyFn(new Poly([
+                {x: -16+width/2, y: -8+height/2},
+                {x: -16+width/2, y: 8+height/2},
+                {x: 16+width/2, y: 8+height/2},
+                {x: 16+width/2, y: -8+height/2}
+            ]), isInBoundsFn);
+        }
     }
 };
 

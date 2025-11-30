@@ -28,7 +28,7 @@ export function initCanvasAndCtx(canvas) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    return {ctx, resizeCanvas, dimsCss, clearAndBackground};
+    return {ctx, dimsCss, clearAndBackground};
 }
 
 export function drawPolys(ctx, polys) {

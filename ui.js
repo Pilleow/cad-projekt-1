@@ -2,8 +2,6 @@ import {addPoly, polys} from './store.js';
 import {findApplicableProductions} from './engine.js';
 import {drawWithPreviews, screenToWorld, view} from './draw.js';
 
-export let mouseX = 0, mouseY = 0;
-
 export function setupUI({
                             canvas, ctx, dimsCss, clearAndBackground,
                             prods, isInBounds, printEl,
@@ -164,7 +162,7 @@ export function setupUI({
         stochasticCount = e.target.value * 10;
 
         if (e.target.value === "-1") autoInformationEl.innerText = "Auto mode will use weighted probability.\n\nThis mode is slow because it iterates over every avaialble polygon and production, but is fair towards all polygons, as ones with more surface area will have a higher probability of being chosen compared to polygons with a smaller surface area.";
-        else if (e.target.value === "0") autoInformationEl.innerText = "Auto mode will select the first available production. \n\nThis mode is good for filling the area with packed productions, but is entirely non-deterministic and does not use any randomness at all.";
+        else if (e.target.value === "0") autoInformationEl.innerText = "Auto mode will select the first available production. \n\nThis mode is good for filling the area with packed productions, but is entirely deterministic and does not use any randomness at all.";
         else if (e.target.value === "1") autoInformationEl.innerText = "Auto mode will randomly select one of ten possible productions. \n\nThis mode is very fast and efficient because it only iterates over a randomly selected ten polygons and ten productions, however it uses uniform randomness, which may result in large patches of empty space in some regions, and dense concentrations of polygons in others.";
         else autoInformationEl.innerText = "Unspecified behaviour. Reload page.";
 

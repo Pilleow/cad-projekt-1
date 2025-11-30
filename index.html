@@ -23,17 +23,15 @@
                     <option value="tri">Sierpinski Triangle</option>
                     <option value="sponge">Menger Sponge</option>
                     <option value="halfrect">Half Cubes</option>
+                    <option value="tiles">Tiles</option>
                 </select>
             </label>
             <button id="savePng" style="background-color: yellowgreen">Save PNG</button>
             <button id='resetPage' onclick="window.location.reload()" style="background-color: orangered">Reset</button>
         </div>
-        <div class="sub-menu">
+        <div class="sub-menu" style="font-family: monospace;">
             <p id="print" style="opacity: 0.7;">Idle.</p>
-            <p style="opacity: 0.7;">Polygons created:</p>
-            <p style="opacity: 0.7;" id="polyCount">0</p>
-            <p style="opacity: 0.7;">Productions applied:</p>
-            <p style="opacity: 0.7;" id="prodCount">0</p>
+            <p style="opacity: 0.7;">Polygons created: <span style="opacity: 0.7;" id="polyCount">0</span></p>
         </div>
         <div class="sub-menu" style="padding-bottom: 0; border-bottom: none;">
             <label class="checkbox-input">
