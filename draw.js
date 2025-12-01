@@ -1,8 +1,11 @@
 export let view = {
     zoom: 1,
+    prev_zoom: 0,
     offsetX: 0,
     offsetY: 0
 };
+
+export let queueToDraw = [];
 
 export function initCanvasAndCtx(canvas) {
     const ctx = canvas.getContext('2d');
@@ -33,7 +36,10 @@ export function initCanvasAndCtx(canvas) {
 
 export function drawPolys(ctx, polys) {
     ctx.lineWidth = 1 / view.zoom;
-    polys.forEach(p => p.draw(ctx));
+    queueToDraw.forEach(p => {
+        p.draw(ctx);
+    });
+    queueToDraw.length = 0;
 }
 
 export function drawWithPreviews(ctx, polys, candidates, hovered) {

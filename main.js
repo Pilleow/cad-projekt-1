@@ -1,7 +1,7 @@
-import {initCanvasAndCtx} from './draw.js';
+import {initCanvasAndCtx, queueToDraw, view} from './draw.js';
 import {Poly} from './poly.js';
 import {Prod} from './prod.js';
-import {addPoly, clearStore} from './store.js';
+import {addPoly, clearStore, polys} from './store.js';
 import {setupUI} from './ui.js';
 import {EQUI_TRIANGLE_H} from './utils.js';
 
@@ -260,6 +260,10 @@ function loadPreset(key) {
     preset.seed(addPoly, isInBounds, dimsCss);
 
     ui.refreshCandidates();
+
+    clearAndBackground();
+    view.prev_zoom = view.zoom;
+    for (const p of polys) queueToDraw.push(p);
     ui.redraw();
 }
 

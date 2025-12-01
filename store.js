@@ -1,3 +1,5 @@
+import {queueToDraw} from "./draw.js";
+
 export const polys = [];
 const polyKeys = new Set();
 
@@ -27,9 +29,16 @@ export function addPoly(poly, isInBounds = () => true) {
     const idx = findInsertIndexPoly(polys, poly);
     polys.splice(idx, 0, poly);
     document.getElementById("polyCount").innerText = polys.length.toString();
+    queueToDraw.push(poly);
 }
 
 export function findPoly(target_p, e=2**2) {
+
+    // TODO
+    // przyspieszenie findPoly pozwoli
+    // na znaczne przyspieszenie programu
+    // przy dużej liczbie poligonów
+
     const target_pts = target_p.getPoints()
     let minPoly = polys[0];
     let minSqErr = 2**2;
@@ -53,4 +62,5 @@ export function findPoly(target_p, e=2**2) {
 
 export function clearStore() {
     polys.length = 0;
+    queueToDraw.length = 0;
 }

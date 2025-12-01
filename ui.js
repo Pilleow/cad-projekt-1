@@ -1,6 +1,6 @@
 import {addPoly, polys} from './store.js';
 import {findApplicableProductions} from './engine.js';
-import {drawWithPreviews, screenToWorld, view} from './draw.js';
+import {drawWithPreviews, queueToDraw, screenToWorld, view} from './draw.js';
 
 export function setupUI({
                             canvas, ctx, dimsCss, clearAndBackground,
@@ -59,7 +59,11 @@ export function setupUI({
     }
 
     function redraw() {
-        clearAndBackground();
+        if (view.zoom !== view.prev_zoom) {
+            clearAndBackground();
+            view.prev_zoom = view.zoom;
+            for (const p of polys) queueToDraw.push(p);
+        }
         drawWithPreviews(ctx, polys, showCandidates ? candidates : [], showCandidates ? hoveredCandidate : null);
     }
 
@@ -100,6 +104,9 @@ export function setupUI({
         stochasticCount = -10;
         stochasticCountEl.value = -1;
         if (showCandidates) refreshCandidates();
+        clearAndBackground();
+        view.prev_zoom = view.zoom;
+        for (const p of polys) queueToDraw.push(p);
         redraw();
     });
 
@@ -122,7 +129,12 @@ export function setupUI({
         showCandidates = false;
 
         autoTimer = setInterval(() => {
-            refreshCandidates();
+            let tries = 0;
+            while (true) {
+                refreshCandidates();
+                tries += 1
+                if (tries > 10000 || candidates.length > 0) break;
+            }
             if (!candidates.length) {
                 stopAuto();
                 return;
